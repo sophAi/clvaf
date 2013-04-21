@@ -4,8 +4,6 @@ __kernel void first_tcf(__global const int* ndim_fac, __global int* tcf_window, 
   for (I0 = 0; I0 < *tcf_window - work_id; I0++) {   //self correlation
     for (J0 = 0; J0 < *ndim_fac; J0++) {
       tcf_buffer[work_id] += odd_buffer[I0 * *ndim_fac+ J0] * odd_buffer[(I0 + work_id) * *ndim_fac + J0];    
-//      tcf_buffer[work_id] = *ndim_fac* *tcf_window; 
-//      tcf_buffer[work_id] = odd_buffer[work_id];
     }
   }
 }
