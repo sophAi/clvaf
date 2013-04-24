@@ -261,12 +261,14 @@ int main()
     }
   
     if (tcf_last_window != 0) {
-      err = clEnqueueWriteBuffer(queue, cl_tcf_window, CL_TRUE, 0, sizeof(int), &tcf_last_window, 0, 0, 0);
       std::cout << "Calculating last loop\n";
       size_t last_work_size = tcf_last_window;
       if (cycle == is_odd){
         for (I1 = 0; I1 < tcf_last_window * vec_ndim_fac; I1++) {
            vector_file >> even_buffer[I1];
+        }
+        for (I1 = tcf_last_window * vec_ndim_fac; I1 < tcf_window * vec_ndim_fac; I1++) {
+           even_buffer[I1] = 0;
         }
         gpu_start_time = time(NULL);
         err = clEnqueueWriteBuffer(queue, cl_even_buffer, CL_TRUE, 0, sizeof(float) * tcf_window * vec_ndim_fac, &even_buffer[0], 0, 0, 0);
@@ -276,6 +278,9 @@ int main()
       } else {
         for (I1 = 0; I1 < tcf_last_window * vec_ndim_fac; I1++) {
           vector_file >> odd_buffer[I1];
+        }
+        for (I1 = tcf_last_window * vec_ndim_fac; I1 < tcf_window * vec_ndim_fac; I1++) {
+          odd_buffer[I1] = 0;
         }
         gpu_start_time = time(NULL);
         err = clEnqueueWriteBuffer(queue, cl_odd_buffer, CL_TRUE, 0, sizeof(float) * tcf_window * vec_ndim_fac, &odd_buffer[0], 0, 0, 0);
